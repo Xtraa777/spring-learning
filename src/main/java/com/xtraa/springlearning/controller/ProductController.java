@@ -48,28 +48,4 @@ public class ProductController {
         return productId + " 번 상품 삭제 요청 받음";
     }
 
-    static class Product {
-
-        private String name;
-        private double price;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public double getPrice() {
-            return price;
-        }
-
-        public void setPrice(double price) {
-            this.price = price;
-        }
-
-        public Product() {
-        }
-    }
 }
