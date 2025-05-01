@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: spring-learning
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/mySpring?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&useSSL=false # your_database_name 수정 필수!
+    username: root # 사용자 DB 계정명 수정 필수!
+    password: ${DB_PASSWORD} # 사용자 DB 비밀번호 수정 필수!
+    driver-class-name: com.mysql.cj.jdbc.Driver # MySQL 8.0+ 드라이버
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    # 실행되는 SQL 쿼리 설정
+    show-sql: true # 콘솔에 실행 SQL 출력
+    properties:
+      hibernate:
+        format_sql: true # SQL 예쁘게 포맷팅
+        use_sql_comments: true # SQL에 주석 추가
