@@ -1,5 +1,6 @@
 package com.xtraa.springlearning.controller;
 
+import com.xtraa.springlearning.dto.ProductDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,39 +49,54 @@ public class DataHandlingController {
         return "Received Product ID from path: " + productId;
     }
 
+    // POST /request-body/products 요청 처리
+// @RequestBody 로 받을 타입을 ProductEntity 가 아닌 ProductDto 로 변경
     @PostMapping("/request-body/products")
-    public String handleRequestBody(@RequestBody Product product) {
-        // 요청 본문: {"name": "Laptop", "price": 1200.0}
-        // -> Spring 이 Product 객체 생성 후 name 필드에 "Laptop", price 필드에 1200.0 설정
-
-        return "Received Product from body: " + product.getName() + " (" + product.getPrice() + ")";
+    public String handleRequestBody(@RequestBody ProductDto productDto) {
+        System.out.println(
+            "Received ProductDto from body: " + productDto.getName() + " (" + productDto.getPrice()
+                + ")");
+        // 받은 DTO 객체를 사용하여 비즈니스 로직(Service 호출 등) 수행...
+        // Service 계층에서 ProductEntity 로 변환하여 DB에 저장할 수 있음
+        return "Received ProductDto: " + productDto.getName();
     }
 
+    // createProductWithResponseEntity 메서드도 ProductEntity 대신 ProductDto 를 사용하거나,
+    // 응답용 DTO (예: CreatedProductResponseDto) 를 새로 만들어 사용하는 것이 좋습니다.
+    // 일단 간단하게 ProductDto 를 사용하도록 수정합니다.
     @PostMapping("/response-entity/products")
-    public ResponseEntity<Product> createProductWithResponseEntity(@RequestBody Product product) {
-        System.out.println("POST /response-entity/products 요청 받음: " + product.getName());
+    public ResponseEntity<ProductDto> createProductWithResponseEntity(
+        @RequestBody ProductDto productDto) {
+        System.out.println("POST /response-entity/products 요청 받음: " + productDto.getName());
 
-        Product createdProduct = product;
+        // 비즈니스 로직 수행 (Service 호출 등) ...
+        // 응답용 DTO 를 만들어 반환하는 것이 일반적이지만, 여기서는 간단히 받은 DTO 를 그대로 반환
+        ProductDto createdProductResponse = productDto; // 실제로는 저장 후 응답에 필요한 정보만 담은 DTO
 
-        // HTTP 상태 코드 201 Created 와 함께 생성된 Product 객체를 응답 본문에 담아 반환
-        // 헤더 추가 등 더 많은 제어 가능
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
-        // return new ResponseEntity<>(createdProduct, HttpStatus.CREATED); // 위와 동일한 결과
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdProductResponse);
     }
 
     @GetMapping("/response-entity/product/{productId}")
-    public ResponseEntity<?> getProductResponseEntity(@PathVariable Long productId) {
+    public ResponseEntity<ProductDto> getProductResponseEntity(
+        @PathVariable Long productId) { // 반환 타입을 ResponseEntity<ProductDto> 로 변경
+
+        // 실제로는 Service 계층 호출하여 DB에서 productId 로 Product Entity 를 조회하고,
+        // 그 Entity 를 ProductDto 로 변환하여 반환해야 합니다.
+        // 여기서는 간단한 예시를 위해 임의의 DTO 객체를 생성합니다.
 
         // 조회 결과가 없다고 가정
-        if (productId > 100) {
+        if (productId > 100) { // 예시 조건
             // HTTP 상태 코드 404 Not Found 와 함께 응답 본문 없이 반환
             return ResponseEntity.notFound().build();
-            // return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 동일 결과
         }
-        // 조회 결과가 있다고 가정
-        Product foundProduct = new Product("Sample Product", 99.99);
 
-        return ResponseEntity.ok(foundProduct);
-        // return ResponseEntity.status(HttpStatus.OK).body(foundProduct); // 동일 결과
+        // 조회 결과가 있다고 가정하고 임의의 ProductDto 객체 생성
+        // ProductEntity 가 아님! 클라이언트에게 보여줄 DTO 객체입니다.
+        ProductDto foundProductDto = new ProductDto("Sample Product",
+            99.99); // ProductDto 객체 생성 및 값 설정
+
+        // HTTP 상태 코드 200 OK 와 함께 ProductDto 객체를 응답 본문에 담아 반환
+        // Spring 이 ProductDto 객체를 JSON 으로 자동 변환합니다.
+        return ResponseEntity.ok(foundProductDto);
     }
 }
