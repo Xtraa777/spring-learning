@@ -3,7 +3,7 @@ spring:
     name: spring-learning
 
   datasource:
-    url: jdbc:mysql://localhost:3306/mySpring?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&useSSL=false # your_database_name 수정 필수!
+    url: jdbc:mysql://localhost:3306/mySpring?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul
     username: root # 사용자 DB 계정명 수정 필수!
     password: ${DB_PASSWORD} # 사용자 DB 비밀번호 수정 필수!
     driver-class-name: com.mysql.cj.jdbc.Driver # MySQL 8.0+ 드라이버

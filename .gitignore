@@ -1,7 +1,7 @@
-HELP.md
+study/HELP.md
 .gradle
 build/
-!gradle/wrapper/gradle-wrapper.jar
+!study/gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
