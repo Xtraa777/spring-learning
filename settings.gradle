@@ -1,4 +1,4 @@
 rootProject.name = 'spring-learning'
-
-include 'study'
 include 'servlet'
+include 'study'
+include 'security'
